@@ -3,139 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Scenario Analysis</title>
+    <title>Scenario Intelligence Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-900 p-4 md:p-8">
+<body class="bg-slate-50 text-slate-900 font-sans">
 
-    <div class="max-w-6xl mx-auto">
-        <header class="mb-8 border-b pb-4">
-            <h1 class="text-3xl font-bold text-indigo-700">Energy Strategy Dashboard</h1>
-            <p class="text-slate-500">Comparison: Baseline vs. Mitigation Scenarios</p>
+    <div class="max-w-[1600px] mx-auto p-4 md:p-8">
+        <header class="mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <div>
+                <h1 class="text-2xl font-extrabold text-indigo-800 tracking-tight">Scenario Intelligence</h1>
+                <p class="text-slate-500 text-sm">Dynamic Energy Projection Analysis</p>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-6">
+                <div class="flex flex-col">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Active Metric</label>
+                    <select id="metricSelector" class="bg-slate-50 border border-slate-200 text-sm rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none min-w-[200px] font-semibold text-slate-700">
+                        <option value="">Upload JSON...</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Source File</label>
+                    <input type="file" id="fileInput" accept=".json" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer"/>
+                </div>
+                <button id="exportBtn" class="hidden mt-4 lg:mt-0 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded-full transition-all">
+                    Export CSV
+                </button>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Final Energy Demand (T4)</h3>
-                <div class="flex items-end gap-2">
-                    <span id="final-demand-val" class="text-2xl font-bold">---</span>
-                    <span class="text-slate-400 mb-1">GJ</span>
-                </div>
-                <p class="text-xs text-green-600 mt-2 font-medium">Latest Projection Period</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Pollutant Loadings (T4)</h3>
-                <div class="flex items-end gap-2">
-                    <span id="pollutant-val" class="text-2xl font-bold text-red-600">---</span>
-                    <span class="text-slate-400 mb-1">KG</span>
-                </div>
-                <p class="text-xs text-slate-500 mt-2 font-medium">Environmental Impact</p>
-            </div>
+        <div id="empty-state" class="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-slate-200 shadow-sm">
+            <p class="text-slate-400 font-medium">Please select a scenario JSON file to begin analysis.</p>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
-            <h2 class="text-lg font-bold mb-4">Demand Growth Trend</h2>
-            <div class="h-[400px]">
-                <canvas id="demandChart"></canvas>
+        <div id="dashboard-content" class="hidden animate-in fade-in duration-500">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-xs font-bold text-slate-400 uppercase">Final Period Value</p>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span id="final-val" class="text-3xl font-black text-slate-800">---</span>
+                        <span class="unit-text text-sm font-medium text-slate-400"></span>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <p id="variance-label" class="text-xs font-bold text-slate-400 uppercase">Scenario Variance</p>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span id="reduction-pct" class="text-3xl font-black">---</span>
+                        <span class="text-sm font-medium text-slate-400">Total Difference</span>
+                    </div>
+                </div>
+                <div class="bg-indigo-600 p-5 rounded-2xl border border-indigo-700 shadow-lg text-white">
+                    <p class="text-xs font-bold text-indigo-200 uppercase">Selected Metric</p>
+                    <p id="active-metric-name" class="text-xl font-bold mt-1 truncate">---</p>
+                </div>
             </div>
-        </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-4 border-b bg-slate-50">
-                <h2 class="text-lg font-bold">Raw Scenario Comparison</h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-                        <tr>
-                            <th class="px-6 py-3">Scenario</th>
-                            <th class="px-6 py-3">Metric</th>
-                            <th class="px-6 py-3">T1</th>
-                            <th class="px-6 py-3">T2</th>
-                            <th class="px-6 py-3">T3</th>
-                            <th class="px-6 py-3">T4</th>
-                        </tr>
-                    </thead>
-                    <tbody id="data-table-body" class="divide-y divide-slate-100">
-                        </tbody>
-                </table>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm h-[550px] flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="font-bold text-slate-800">Trend Projection</h2>
+                        <span class="unit-text text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-1 rounded"></span>
+                    </div>
+                    <div class="flex-grow">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col h-[550px]">
+                    <div class="p-6 border-b border-slate-100">
+                        <h2 class="font-bold text-slate-800">Raw Data Breakdown</h2>
+                    </div>
+                    <div class="overflow-auto flex-grow">
+                        <table class="w-full text-left text-xs whitespace-nowrap">
+                            <thead id="table-head" class="sticky top-0 bg-slate-50 text-slate-500 font-bold border-b border-slate-200"></thead>
+                            <tbody id="table-body" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // The Data provided by the user
-        const rawData = [
-            {
-                "Scenario": "Baseline",
-                "Demand": {
-                    "Final Energy Demand": [[239627472.6, 349832740.3, 513133227.5, 784841197.6], "GJ"],
-                    "Pollutant Loadings": [[16474167348.9, 22946991197.3, 31901163842.2, 46909159926.6], "KG"]
-                }
-            },
-            {
-                "Scenario": "Mitigation",
-                "Demand": {
-                    "Final Energy Demand": [[239627472.6, 341767842.4, 491256074.4, 741047062.4], "GJ"],
-                    "Pollutant Loadings": [[16474167348.9, 22686328088.3, 31200399492.3, 45634671920.3], "KG"]
-                }
-            }
-        ];
+        let myChart = null;
+        let currentData = null;
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    currentData = JSON.parse(event.target.result);
+                    initDashboard();
+                } catch (err) { alert("Invalid JSON file. Ensure it contains 'years' and 'Demand' keys."); }
+            };
+            reader.readAsText(file);
+        });
+
+        document.getElementById('metricSelector').addEventListener('change', renderUI);
+        document.getElementById('exportBtn').addEventListener('click', exportToCSV);
 
         function initDashboard() {
-            const tableBody = document.getElementById('data-table-body');
+            if (!currentData || !currentData.length) return;
+            const metrics = Object.keys(currentData[0].Demand);
+            const selector = document.getElementById('metricSelector');
+            selector.innerHTML = metrics.map(m => `<option value="${m}">${m}</option>`).join('');
             
-            // 1. Populate Table & Update Metrics
-            rawData.forEach(scen => {
-                const row = `
-                    <tr>
-                        <td class="px-6 py-4 font-bold text-indigo-600">${scen.Scenario}</td>
-                        <td class="px-6 py-4 font-medium italic">Energy Demand</td>
-                        ${scen.Demand["Final Energy Demand"][0].map(val => `<td class="px-6 py-4">${val.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>`).join('')}
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
+            document.getElementById('dashboard-content').classList.remove('hidden');
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('exportBtn').classList.remove('hidden');
+            renderUI();
+        }
 
-            // Update Summary Cards with T4 data
-            document.getElementById('final-demand-val').innerText = rawData[1].Demand["Final Energy Demand"][0][3].toLocaleString(undefined, {maximumFractionDigits: 0});
-            document.getElementById('pollutant-val').innerText = rawData[1].Demand["Pollutant Loadings"][0][3].toLocaleString(undefined, {maximumFractionDigits: 0});
+        function renderUI() {
+            const metric = document.getElementById('metricSelector').value;
+            if (!metric) return;
 
-            // 2. Initialize Chart
-            const ctx = document.getElementById('demandChart').getContext('2d');
-            new Chart(ctx, {
+            const baseline = currentData[0];
+            const mitigation = currentData[currentData.length - 1];
+            
+            const bValues = baseline.Demand[metric][0];
+            const mValues = mitigation.Demand[metric][0];
+            const unit = baseline.Demand[metric][1];
+            const years = baseline.years || bValues.map((_, i) => `T${i+1}`);
+
+            // 1. Insights & Dynamic Coloring
+            const finalVal = mValues[mValues.length - 1];
+            const baselineFinal = bValues[bValues.length - 1];
+            const diffPct = ((1 - (finalVal / baselineFinal)) * 100).toFixed(1);
+            
+            const reductionEl = document.getElementById('reduction-pct');
+            reductionEl.innerText = isFinite(diffPct) ? Math.abs(diffPct) + "%" : "0%";
+            reductionEl.className = `text-3xl font-black ${diffPct >= 0 ? 'text-emerald-600' : 'text-rose-600'}`;
+            document.getElementById('variance-label').innerText = diffPct >= 0 ? "Scenario Reduction" : "Scenario Growth";
+
+            document.getElementById('final-val').innerText = finalVal.toLocaleString();
+            document.getElementById('active-metric-name').innerText = metric;
+            document.querySelectorAll('.unit-text').forEach(el => el.innerText = unit);
+
+            // 2. Table Update
+            document.getElementById('table-head').innerHTML = `
+                <tr>
+                    <th class="px-6 py-4">Scenario</th>
+                    ${years.map(y => `<th class="px-6 py-4">${y}</th>`).join('')}
+                </tr>
+            `;
+
+            document.getElementById('table-body').innerHTML = currentData.map(scen => `
+                <tr class="hover:bg-indigo-50/30 transition-colors">
+                    <td class="px-6 py-5 font-bold text-indigo-700">${scen.Scenario}</td>
+                    ${scen.Demand[metric][0].map(val => `
+                        <td class="px-6 py-5 font-mono text-slate-500">${val.toLocaleString(undefined, {maximumFractionDigits: 1})}</td>
+                    `).join('')}
+                </tr>
+            `).join('');
+
+            // 3. Chart with Dynamic Colors
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Period 1', 'Period 2', 'Period 3', 'Period 4'],
-                    datasets: rawData.map((scen, index) => ({
-                        label: scen.Scenario,
-                        data: scen.Demand["Final Energy Demand"][0],
-                        borderColor: index === 0 ? '#6366f1' : '#10b981',
-                        backgroundColor: index === 0 ? 'rgba(99, 102, 241, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-                        fill: true,
-                        tension: 0.3
-                    }))
+                    labels: years,
+                    datasets: currentData.map((scen, idx) => {
+                        const hue = (idx * 137.5) % 360; // Golden angle for unique colors
+                        return {
+                            label: scen.Scenario,
+                            data: scen.Demand[metric][0],
+                            borderColor: `hsl(${hue}, 70%, 50%)`,
+                            backgroundColor: `hsla(${hue}, 70%, 50%, 0.1)`,
+                            fill: true,
+                            tension: 0.3,
+                            borderWidth: idx === 0 ? 4 : 2, // Highlight baseline
+                            pointRadius: 3
+                        }
+                    })
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' }
-                    },
+                    plugins: { legend: { position: 'bottom' } },
                     scales: {
-                        y: { 
-                            beginAtZero: false,
-                            ticks: { callback: value => (value / 1e6) + 'M' }
-                        }
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
                     }
                 }
             });
         }
 
-        // Run on load
-        window.onload = initDashboard;
+        function exportToCSV() {
+            const metric = document.getElementById('metricSelector').value;
+            const years = currentData[0].years;
+            let csvContent = "Scenario," + years.join(",") + "\n";
+            
+            currentData.forEach(scen => {
+                csvContent += `${scen.Scenario},${scen.Demand[metric][0].join(",")}\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `energy_analytics_${metric}.csv`);
+            a.click();
+        }
     </script>
 </body>
-
 </html>
