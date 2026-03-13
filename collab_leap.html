@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Scenario Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8 border-b pb-4">
+            <h1 class="text-3xl font-bold text-indigo-700">Energy Strategy Dashboard</h1>
+            <p class="text-slate-500">Comparison: Baseline vs. Mitigation Scenarios</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Final Energy Demand (T4)</h3>
+                <div class="flex items-end gap-2">
+                    <span id="final-demand-val" class="text-2xl font-bold">---</span>
+                    <span class="text-slate-400 mb-1">GJ</span>
+                </div>
+                <p class="text-xs text-green-600 mt-2 font-medium">Latest Projection Period</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Pollutant Loadings (T4)</h3>
+                <div class="flex items-end gap-2">
+                    <span id="pollutant-val" class="text-2xl font-bold text-red-600">---</span>
+                    <span class="text-slate-400 mb-1">KG</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 font-medium">Environmental Impact</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
+            <h2 class="text-lg font-bold mb-4">Demand Growth Trend</h2>
+            <div class="h-[400px]">
+                <canvas id="demandChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-4 border-b bg-slate-50">
+                <h2 class="text-lg font-bold">Raw Scenario Comparison</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
+                        <tr>
+                            <th class="px-6 py-3">Scenario</th>
+                            <th class="px-6 py-3">Metric</th>
+                            <th class="px-6 py-3">T1</th>
+                            <th class="px-6 py-3">T2</th>
+                            <th class="px-6 py-3">T3</th>
+                            <th class="px-6 py-3">T4</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body" class="divide-y divide-slate-100">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // The Data provided by the user
+        const rawData = [
+            {
+                "Scenario": "Baseline",
+                "Demand": {
+                    "Final Energy Demand": [[239627472.6, 349832740.3, 513133227.5, 784841197.6], "GJ"],
+                    "Pollutant Loadings": [[16474167348.9, 22946991197.3, 31901163842.2, 46909159926.6], "KG"]
+                }
+            },
+            {
+                "Scenario": "Mitigation",
+                "Demand": {
+                    "Final Energy Demand": [[239627472.6, 341767842.4, 491256074.4, 741047062.4], "GJ"],
+                    "Pollutant Loadings": [[16474167348.9, 22686328088.3, 31200399492.3, 45634671920.3], "KG"]
+                }
+            }
+        ];
+
+        function initDashboard() {
+            const tableBody = document.getElementById('data-table-body');
+            
+            // 1. Populate Table & Update Metrics
+            rawData.forEach(scen => {
+                const row = `
+                    <tr>
+                        <td class="px-6 py-4 font-bold text-indigo-600">${scen.Scenario}</td>
+                        <td class="px-6 py-4 font-medium italic">Energy Demand</td>
+                        ${scen.Demand["Final Energy Demand"][0].map(val => `<td class="px-6 py-4">${val.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>`).join('')}
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            // Update Summary Cards with T4 data
+            document.getElementById('final-demand-val').innerText = rawData[1].Demand["Final Energy Demand"][0][3].toLocaleString(undefined, {maximumFractionDigits: 0});
+            document.getElementById('pollutant-val').innerText = rawData[1].Demand["Pollutant Loadings"][0][3].toLocaleString(undefined, {maximumFractionDigits: 0});
+
+            // 2. Initialize Chart
+            const ctx = document.getElementById('demandChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Period 1', 'Period 2', 'Period 3', 'Period 4'],
+                    datasets: rawData.map((scen, index) => ({
+                        label: scen.Scenario,
+                        data: scen.Demand["Final Energy Demand"][0],
+                        borderColor: index === 0 ? '#6366f1' : '#10b981',
+                        backgroundColor: index === 0 ? 'rgba(99, 102, 241, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: false,
+                            ticks: { callback: value => (value / 1e6) + 'M' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Run on load
+        window.onload = initDashboard;
+    </script>
+</body>
+</html>

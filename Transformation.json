@@ -1,0 +1,312 @@
+[
+    {
+        "years": [
+            2020,
+            2030,
+            2040,
+            2050
+        ],
+        "Scenario": "Baseline",
+        "Demand": {
+            "Final Energy Demand": [
+                [
+                    239627472.659385,
+                    349832740.3239631,
+                    513133227.53579247,
+                    784841197.6057191
+                ],
+                "Gigajoule"
+            ],
+            "Useful Energy Demand": [
+                [
+                    104308305.2972508,
+                    156691533.87097862,
+                    234591750.07628375,
+                    362543768.4309958
+                ],
+                "Gigajoule"
+            ],
+            "Demand Coproduction": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Gigajoule"
+            ],
+            "Primary Energy Requirements Allocated to Demands": [
+                [
+                    413162563.8177811,
+                    626542077.601257,
+                    920967145.2079176,
+                    1415471805.716148
+                ],
+                "Gigajoule"
+            ],
+            "Demand Devices": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Device"
+            ],
+            "Investment Costs": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "U.S. Dollar"
+            ],
+            "Power Load Shape": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Kilowatt"
+            ],
+            "Energy Load Shape": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Gigajoule"
+            ],
+            "One_Hundred Year GWP Direct and Indirect Allocated to Demands": [
+                [
+                    22409562278.402527,
+                    37092662661.32854,
+                    58160033013.846214,
+                    93997647829.4065
+                ],
+                "Kilogramme"
+            ],
+            "One_Hundred Year GWP Indirect Allocated to Demands": [
+                [
+                    11696808440.049511,
+                    21271226097.944706,
+                    33999379047.172127,
+                    55793998450.80415
+                ],
+                "Kilogramme"
+            ],
+            "Gross Energy Consumption": [
+                [
+                    239627472.659385,
+                    349832740.3239631,
+                    513133227.53579247,
+                    784841197.6057191
+                ],
+                "Gigajoule"
+            ],
+            "One_Hundred Year GWP Direct At Point of Emissions": [
+                [
+                    10712753838.35302,
+                    15821436563.383821,
+                    24160653966.674084,
+                    38203649378.60238
+                ],
+                "Kilogramme"
+            ],
+            "Twenty Year GWP Direct At Point of Emissions": [
+                [
+                    11081624844.504383,
+                    16230928739.534851,
+                    24608696794.705338,
+                    38708625337.437256
+                ],
+                "Kilogramme"
+            ],
+            "Five_Hundred Year GWP Direct At Point of Emissions": [
+                [
+                    10519287122.172249,
+                    15600030108.187366,
+                    23913985107.640743,
+                    37918298802.959015
+                ],
+                "Kilogramme"
+            ],
+            "Pollutant Loadings": [
+                [
+                    16474167348.984549,
+                    22946991197.372627,
+                    31901163842.223095,
+                    46909159926.662346
+                ],
+                "Kilogramme"
+            ],
+            "Social Costs": [
+                [
+                    12599999.999999989,
+                    19755570.776358582,
+                    30342668.74244615,
+                    45875260.705484584
+                ],
+                "U.S. Dollar"
+            ]
+        }
+    },
+    {
+        "years": [
+            2020,
+            2030,
+            2040,
+            2050
+        ],
+        "Scenario": "Mitigation",
+        "Demand": {
+            "Final Energy Demand": [
+                [
+                    239627472.659385,
+                    341767842.40949625,
+                    491256074.46223325,
+                    741047062.4062836
+                ],
+                "Gigajoule"
+            ],
+            "Useful Energy Demand": [
+                [
+                    104308305.2972508,
+                    153726418.2119649,
+                    226046430.78136873,
+                    344087318.7738828
+                ],
+                "Gigajoule"
+            ],
+            "Demand Coproduction": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Gigajoule"
+            ],
+            "Primary Energy Requirements Allocated to Demands": [
+                [
+                    413162563.8177811,
+                    522479131.4176986,
+                    690464330.6544049,
+                    999368365.4109168
+                ],
+                "Gigajoule"
+            ],
+            "Demand Devices": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Device"
+            ],
+            "Investment Costs": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "U.S. Dollar"
+            ],
+            "Power Load Shape": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Kilowatt"
+            ],
+            "Energy Load Shape": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Gigajoule"
+            ],
+            "One_Hundred Year GWP Direct and Indirect Allocated to Demands": [
+                [
+                    22409562278.402527,
+                    27734444887.98714,
+                    37199184585.64551,
+                    56645429307.36722
+                ],
+                "Kilogramme"
+            ],
+            "One_Hundred Year GWP Indirect Allocated to Demands": [
+                [
+                    11696808440.049511,
+                    12165743736.731491,
+                    13713241354.395975,
+                    19667152663.12629
+                ],
+                "Kilogramme"
+            ],
+            "Gross Energy Consumption": [
+                [
+                    239627472.659385,
+                    341767842.40949625,
+                    491256074.46223325,
+                    741047062.4062836
+                ],
+                "Gigajoule"
+            ],
+            "One_Hundred Year GWP Direct At Point of Emissions": [
+                [
+                    10712753838.35302,
+                    15568701151.255648,
+                    23485943231.24951,
+                    36978276644.24097
+                ],
+                "Kilogramme"
+            ],
+            "Twenty Year GWP Direct At Point of Emissions": [
+                [
+                    11081624844.504383,
+                    15982190016.156094,
+                    23949661518.056095,
+                    37514358697.37614
+                ],
+                "Kilogramme"
+            ],
+            "Five_Hundred Year GWP Direct At Point of Emissions": [
+                [
+                    10519287122.172249,
+                    15346100734.119993,
+                    23234184595.859653,
+                    36682678090.114494
+                ],
+                "Kilogramme"
+            ],
+            "Pollutant Loadings": [
+                [
+                    16474167348.984549,
+                    22686328088.371887,
+                    31200399492.318924,
+                    45634671920.3908
+                ],
+                "Kilogramme"
+            ],
+            "Social Costs": [
+                [
+                    12599999.999999989,
+                    212008496.44422096,
+                    654992911.8337085,
+                    1272507879.15457
+                ],
+                "U.S. Dollar"
+            ]
+        }
+    }
+]
