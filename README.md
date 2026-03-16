@@ -41,19 +41,69 @@ A web platform for researchers to **track, compare, and collaborate on energy mo
 **Relationships:**
 
 ```
-User
- │
- ├── Projects
- │     │
- │     ├── Project Members
- │     │
- │     └── Scenarios
- │           │
- │           └── Scenario Versions
- │                 │
- │                 ├── Assumptions
- │                 ├── Files
- │                 └── Results
+leap-collab-platform/
+│
+├── README.md                   # Project documentation
+├── requirements.txt            # Python dependencies
+├── dockerfile                  # Docker container setup
+├── .gitignore                  # Ignore unnecessary files (venv, __pycache__, etc.)
+│
+├── app/                        # Main FastAPI application
+│   ├── main.py                 # Entry point
+│   │
+│   ├── api/                    # API routes
+│   │   ├── routes/
+│   │   │   ├── users.py        # User-related endpoints
+│   │   │   ├── projects.py     # Project endpoints
+│   │   │   ├── scenarios.py    # Scenario endpoints
+│   │   │   └── uploads.py      # File upload endpoints
+│   │   └── api_router.py       # Combines all routes
+│   │
+│   ├── core/                   # Config and security
+│   │   ├── config.py           # Database URL, secret keys
+│   │   └── security.py         # Authentication utilities (JWT, password hashing)
+│   │
+│   ├── models/                 # Database models
+│   │   ├── user.py
+│   │   ├── project.py
+│   │   ├── scenario.py
+│   │   └── results.py
+│   │
+│   ├── schemas/                # Pydantic schemas for request/response validation
+│   │   ├── user_schema.py
+│   │   ├── project_schema.py
+│   │   └── scenario_schema.py
+│   │
+│   ├── services/               # Business logic
+│   │   ├── project_service.py
+│   │   ├── scenario_service.py
+│   │   └── result_service.py
+│   │
+│   ├── db/                     # Database connections
+│   │   ├── database.py         # SQLAlchemy engine
+│   │   └── session.py          # Session handling
+│   │
+│   └── utils/                  # Helper functions
+│       ├── file_parser.py      # CSV/Excel parsing
+│       └── helpers.py          # Other utilities
+│
+├── tests/                      # Unit and integration tests
+│   ├── test_users.py
+│   ├── test_projects.py
+│   └── test_scenarios.py
+│
+└── frontend/                   # React frontend (optional folder if you include UI)
+    ├── package.json
+    ├── public/
+    │   └── index.html
+    └── src/
+        ├── App.js
+        ├── components/
+        │   ├── Dashboard.js
+        │   ├── ProjectPage.js
+        │   └── ScenarioPage.js
+        └── services/
+            └── api.js           # API calls to FastAPI backend
 ```
 
 ---
