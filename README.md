@@ -1,7 +1,3 @@
-Absolutely! Here’s the **entire README in a single block of text** that you can copy directly into your `README.md` file:
-
----
-
 # Collaborative LEAP Scenario Tracking Platform
 
 A web platform for researchers to **track, compare, and collaborate on energy modeling scenarios** exported from LEAP. This project allows teams to **manage multiple projects, track scenario versions, upload results, and visualize trends** — all without violating LEAP licensing restrictions.
